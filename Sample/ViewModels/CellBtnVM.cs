@@ -2,28 +2,25 @@
 using Prism.Mvvm;
 using Sample.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Sample.ViewModels
 {
-    internal class CellBtnVM: BindableBase
+    internal class CellBtnVM : BindableBase
     {
-        private CellStatus _status=CellStatus.Empty;
-        
+        private CellStatus _status = CellStatus.Empty;
         public CellStatus Status
         {
-            get { return _status; }
-            set 
+            get => _status;
+
+            set
             {
-                _status = value; 
+                _status = value;
                 RaisePropertyChanged(nameof(Status));
             }
         }
 
-        public DelegateCommand<CellStatus> SetStatusCommand { get;  }
+        public DelegateCommand<object> SetStatusCommand { get; }
 
         private Action<CellBtnVM> _updateAppStatus;
 
@@ -35,13 +32,15 @@ namespace Sample.ViewModels
             Row = row;
             Column = column;
             _updateAppStatus = updateAppStatus;
-            SetStatusCommand=new DelegateCommand<CellStatus>(SetStatus);
+            SetStatusCommand = new DelegateCommand<object>(SetStatus);
         }
 
-        private void SetStatus(CellStatus status)
+        private void SetStatus(object status)
         {
-            if (this.Status != CellStatus.Empty) return;
-            Status = status;
+            if (this.Status != CellStatus.Empty)
+                return;
+
+            Status = (CellStatus)status;
             _updateAppStatus?.Invoke(this);
         }
     }

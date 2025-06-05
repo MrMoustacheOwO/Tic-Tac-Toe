@@ -11,28 +11,32 @@ namespace Sample.ViewModels
 {
     internal class MainWindowViewModel: BindableBase
     {
-		private CellStatus _currentPlayerStatus;
-
-		public CellStatus CurrentPlayerStatus
+        private CellStatus _currentPlayerStatus;
+        public CellStatus CurrentPlayerStatus
         {
-			get { return _currentPlayerStatus; }
-			set { _currentPlayerStatus = value; }
-		}
+            get => _currentPlayerStatus;
 
-		public List<List<CellBtnVM>> AllCells { get; } = new List<List<CellBtnVM>>();
+            private set
+            {
+                _currentPlayerStatus = value;
+                RaisePropertyChanged(nameof(CurrentPlayerStatus));
+            }
+        }
+
+        public List<List<CellBtnVM>> AllCells { get; } = new List<List<CellBtnVM>>();
 
         private int _cellRowColumnCount = 3;
-
         public MainWindowViewModel()
         {
-            CurrentPlayerStatus=CellStatus.Cross;
+            CurrentPlayerStatus = CellStatus.Cross;
 
             for (int row = 0; row < _cellRowColumnCount; row++)
             {
-                var newRow=new List<CellBtnVM>();
+                var newRow = new List<CellBtnVM>();
                 for (int column = 0; column < _cellRowColumnCount; column++)
                 {
-                    var newCell = new CellBtnVM(row,column,CheckGameStatus);
+                    var newCell = new CellBtnVM(row, column, CheckGameStatus);
+                    newRow.Add(newCell);
                 }
                 AllCells.Add(newRow);
             }
@@ -40,30 +44,33 @@ namespace Sample.ViewModels
 
         private void CheckGameStatus(CellBtnVM lastClickBtn)
         {
-            //Проверка по столбцу
-            var columnCheck=new List<CellBtnVM>();
+            if (AllCells.SelectMany(x => x.Where(c => c.Status == CellStatus.Empty)).Count() == 0)
+            {
+                StopGame();
+                return;
+            }
+            // column check
+            var columnCheck = new List<CellBtnVM>();
             for (int i = 0; i <= _cellRowColumnCount / 2; i++)
             {
-                int column=lastClickBtn.Column+1+i;
-                if(column < _cellRowColumnCount)
+                int column = lastClickBtn.Column + 1 + i;
+                if (column < _cellRowColumnCount)
                 {
                     columnCheck.Add(AllCells[lastClickBtn.Row][column]);
                 }
                 else
                 {
-                    columnCheck.Add(AllCells[lastClickBtn.Row][column- _cellRowColumnCount]);
+                    columnCheck.Add(AllCells[lastClickBtn.Row][column - _cellRowColumnCount]);
                 }
             }
 
-            if (columnCheck.All(x => x.Status == lastClickBtn.Status)) 
-            { 
+            if (columnCheck.All(x => x.Status == lastClickBtn.Status))
+            {
                 StopGame(lastClickBtn.Status);
                 return;
             }
 
-            //Проверка по строке
             var rowCheck = new List<CellBtnVM>();
-
             for (int i = 0; i <= _cellRowColumnCount / 2; i++)
             {
                 int row = lastClickBtn.Row + 1 + i;
@@ -76,77 +83,97 @@ namespace Sample.ViewModels
                     rowCheck.Add(AllCells[row - _cellRowColumnCount][lastClickBtn.Column]);
                 }
             }
+
             if (rowCheck.All(x => x.Status == lastClickBtn.Status))
             {
                 StopGame(lastClickBtn.Status);
                 return;
             }
 
-            //Проверки по диагонали
-            int checkCrossRun =Math.Abs(lastClickBtn.Column-lastClickBtn.Row);
-            if(checkCrossRun!=0 && checkCrossRun != _cellRowColumnCount - 1)
+            bool checkByDiagonal = true;
+            int checkCrossNum = Math.Abs(lastClickBtn.Column - lastClickBtn.Row);
+
+            if (checkCrossNum != 0 && checkCrossNum != _cellRowColumnCount - 1)
             {
-                return;
+                checkByDiagonal = false;
             }
 
-            //Проверка по диагонали слева вправо
-            var crossCheck1 = new List<CellBtnVM>();
-            for (int i = 0; i <= _cellRowColumnCount / 2; i++)
+            if (checkByDiagonal &&
+                !(lastClickBtn.Row == 0 && lastClickBtn.Column == _cellRowColumnCount - 1) &&
+                !(lastClickBtn.Row == _cellRowColumnCount - 1 && lastClickBtn.Column == 0)
+                )
             {
-                int column = lastClickBtn.Column + 1 + i;
-                int row=lastClickBtn.Row +1 + i;
-                if (column < _cellRowColumnCount)
+                var crossCheck1 = new List<CellBtnVM>();
+                for (int i = 0; i <= _cellRowColumnCount / 2; i++)
                 {
-                    crossCheck1.Add(AllCells[row][column]);
+                    int column = lastClickBtn.Column + 1 + i;
+                    int row = lastClickBtn.Row + 1 + i;
+                    if (column < _cellRowColumnCount)
+                    {
+                        crossCheck1.Add(AllCells[row][column]);
+                    }
+                    else
+                    {
+                        crossCheck1.Add(AllCells[row - _cellRowColumnCount][column - _cellRowColumnCount]);
+                    }
                 }
-                else
+
+                if (crossCheck1.All(x => x.Status == lastClickBtn.Status))
                 {
-                    crossCheck1.Add(AllCells[row - _cellRowColumnCount][column - _cellRowColumnCount]);
+                    StopGame(lastClickBtn.Status);
+                    return;
                 }
             }
 
-            if (crossCheck1.All(x => x.Status == lastClickBtn.Status))
+            if (checkByDiagonal)
             {
-                StopGame(lastClickBtn.Status);
-                return;
-            }
-
-            //Проверка по диагонали справо влево
-            var crossCheck2 = new List<CellBtnVM>();
-            for (int i = 0; i <= _cellRowColumnCount / 2; i++)
-            {
-                int column = lastClickBtn.Column + 1 + i;
-                int row = lastClickBtn.Row - (1 + i);
-                if (column < _cellRowColumnCount)
+                var crossCheck2 = new List<CellBtnVM>();
+                for (int i = 0; i <= _cellRowColumnCount / 2; i++)
                 {
+                    int column = lastClickBtn.Column + 1 + i;
+                    int row = lastClickBtn.Row - (1 + i);
+                    if (row < 0)
+                    {
+                        row = row + _cellRowColumnCount;
+                    }
+                    if (column >= _cellRowColumnCount)
+                    {
+                        column = column - _cellRowColumnCount;
+                    }
+
                     crossCheck2.Add(AllCells[row][column]);
                 }
-                else
+
+                if (crossCheck2.All(x => x.Status == lastClickBtn.Status))
                 {
-                    crossCheck2.Add(AllCells[row + _cellRowColumnCount][column - _cellRowColumnCount]);
+                    StopGame(lastClickBtn.Status);
+                    return;
                 }
             }
 
-            if (crossCheck2.All(x => x.Status == lastClickBtn.Status))
-            {
-                StopGame(lastClickBtn.Status);
-                return;
-            }
-
-            CurrentPlayerStatus = lastClickBtn.Status==CellStatus.Cross?CellStatus.Circle:CellStatus.Cross;
+            CurrentPlayerStatus = lastClickBtn.Status == CellStatus.Cross ? CellStatus.Circle : CellStatus.Cross;
         }
 
+        private void StopGame()
+        {
+            MessageBox.Show("Without Winner");
+            Reset();
+        }
         private void StopGame(CellStatus winnerStatus)
         {
             MessageBox.Show($"Winner: {winnerStatus}");
+            Reset();
+        }
+
+        private void Reset()
+        {
             foreach (var row in AllCells)
             {
                 foreach (var cell in row)
                 {
                     cell.Status = CellStatus.Empty;
+                }
             }
-            }
-            
         }
     }
 }
