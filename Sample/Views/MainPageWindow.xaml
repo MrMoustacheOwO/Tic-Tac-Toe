@@ -1,4 +1,4 @@
-﻿<Window x:Class="Sample.Views.AutorisationWindow"
+﻿<Window x:Class="Sample.Views.MainPageWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -97,20 +97,61 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid Height="806">
+    <Grid>
+        <!-- Контент для авторизованного пользователя -->
+        <Grid x:Name="AuthorizedPanel" Visibility="Visible">
 
-        <!-- Контент для неавторизованного пользователя -->
-        <Grid x:Name="UnauthorizedPanel" Visibility="Visible"
-                    VerticalAlignment="Center" HorizontalAlignment="Center" Height="410" Width="630">
-            <Button Content="Войти" Margin="60,70,60,0" Padding="10" Click="LoginButton_Click"
-                    VerticalAlignment="Top" Style="{StaticResource PinkButtonStyle}">
-            </Button>
-            <Button Content="Регистрация" Margin="60,174,60,0" Padding="10" Click="RegisterButton_Click"
-                    VerticalAlignment="Top" Style="{StaticResource PinkButtonStyle}">
-            </Button>
-            <Button Content="Выйти" Margin="65,278,65,0" Padding="10" Click="ExitButton_Click"
-                VerticalAlignment="Top" Style="{StaticResource PinkButtonStyle}"/>
+            <Grid Margin="224,0,224,0" Height="590" VerticalAlignment="Center">
+                <!-- Иконка профиля -->
+                <Button Click="ImageButton_Click" 
+        Padding="0" BorderThickness="0" Margin="0,-56,0,99" Width="81" Height="81" Style="{StaticResource NoHighlightButtonStyle}" Cursor="Hand">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Resources/ProfileIcon81x81.png"/>
+                    </Button.Background>
+
+                </Button>
+
+                <!-- Кнопка "Играть" -->
+                <Button  Content="Быстрая игра" Click="QuickPlayButton_Click"
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Margin="0,292,0,0" Padding="10"
+                    Style="{StaticResource PinkButtonStyle}">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <!-- Кнопка "Выйти" -->
+                <Button  Content="Выйти" Click="LogoutButton_Click"
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Margin="0,496,0,0" Padding="10">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Style>
+                        <StaticResource ResourceKey="PinkButtonStyle"/>
+                    </Button.Style>
+                </Button>
+                <Button  Content="Играть" Click="PlayButton_Click"
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Margin="0,394,0,0" Padding="10">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                    <Button.Style>
+                        <StaticResource ResourceKey="PinkButtonStyle"/>
+                    </Button.Style>
+                </Button>
+            </Grid>
+
         </Grid>
+
 
 
 

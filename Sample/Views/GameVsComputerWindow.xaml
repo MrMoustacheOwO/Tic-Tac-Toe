@@ -1,4 +1,4 @@
-﻿<Window x:Class="Sample.Views.MainWindow"
+﻿<Window x:Class="Sample.Views.GameVsComputerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -49,6 +49,7 @@
         </Style>
     </Window.Resources>
     <Grid>
+       
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <!-- Игровое поле (занимает большую часть места) -->
@@ -105,11 +106,10 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
         <!-- Кнопка "Покинуть матч" -->
         <Button HorizontalAlignment="Left" VerticalAlignment="Top"
-        Click="LeaveMatch"
-        FontSize="16" Cursor="Hand" Height="42" Width="52" Margin="10,21,0,0" Padding="0" Style="{StaticResource MyButtonStyle}">
+Click="LeaveMatch"
+FontSize="16" Cursor="Hand" Height="42" Width="52" Margin="10,21,0,0" Padding="0" Style="{StaticResource MyButtonStyle}">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="10"/>
@@ -117,8 +117,7 @@
             </Button.Resources>
             <Image Source="../Resources/BackArrow.png"/>
         </Button>
-        <Label HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Width="auto" Content="Режим игры: с одного устройства" FontFamily="Arial" FontSize="24"/>
+        <Label HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Width="auto" Content="Режим игры: против компьютера" FontFamily="Arial" FontSize="24"/>
 
     </Grid>
-
 </Window>

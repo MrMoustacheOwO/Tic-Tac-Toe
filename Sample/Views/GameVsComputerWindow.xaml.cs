@@ -10,16 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 namespace Sample.Views
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для GameVsComputerWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GameVsComputerWindow : Window
     {
-        public MainWindow()
+        public GameVsComputerWindow()
         {
             InitializeComponent();
         }
@@ -38,7 +38,7 @@ namespace Sample.Views
                 this.Close();
 
                 // Открываем окно MainPageWindow
-                
+
             }
             // Если пользователь нажал "Нет", ничего не делаем и остаемся в игре
         }

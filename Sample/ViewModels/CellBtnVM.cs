@@ -2,6 +2,9 @@
 using Prism.Mvvm;
 using Sample.Models;
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 
 namespace Sample.ViewModels
@@ -19,6 +22,9 @@ namespace Sample.ViewModels
                 RaisePropertyChanged(nameof(Status));
             }
         }
+        private readonly Action<CellBtnVM> _checkGameStatus;
+
+        public ICommand CellClickCommand { get; }
 
         public DelegateCommand<object> SetStatusCommand { get; }
 

@@ -1,24 +1,22 @@
-﻿<Window x:Class="Sample.Views.AutorisationWindow"
+﻿<Window x:Class="Sample.Views.GameSettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sample.Views"
         mc:Ignorable="d"
-        Title="Главное меню" Height="800" Width="1062" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Окно Настройки игры" Height="800" Width="1000" WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <Style x:Key="WhiteButtonStyle" TargetType="Button">
+        <Style x:Key="MyButtonStyle" TargetType="Button">
             <!-- Базовые свойства кнопки -->
-            <Setter Property="Background" Value="#FFFDFD"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
             <!-- Белый фон по умолчанию -->
             <Setter Property="Foreground" Value="#000000"/>
             <!-- Черный текст по умолчанию -->
-            <Setter Property="BorderBrush" Value="#7A7A7A"/>
+            <Setter Property="BorderBrush" Value="#FFFFFF"/>
             <!-- Серая рамка по умолчанию -->
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="5"/>
-            <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="24"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -36,12 +34,12 @@
             <!-- Триггер для события IsMouseOver (наведение мыши) -->
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <!-- Базовые свойства кнопки -->
                     <Setter Property="Background" Value="#D5B0FF"/>
                     <!-- Золотистый фон при наведении -->
                     <Setter Property="Foreground" Value="#000000"/>
                     <!-- Белый текст при наведении -->
                     <Setter Property="BorderBrush" Value="#FFFFFF"/>
+                    <!-- Темно-золотистая рамка при наведении -->
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -64,11 +62,11 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-            BorderBrush="{TemplateBinding BorderBrush}"
-            BorderThickness="{TemplateBinding BorderThickness}"
-            CornerRadius="16">
+BorderBrush="{TemplateBinding BorderBrush}"
+BorderThickness="{TemplateBinding BorderThickness}"
+CornerRadius="16">
                             <ContentPresenter HorizontalAlignment="Center"
-                          VerticalAlignment="Center"/>
+              VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -86,33 +84,33 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="NoHighlightButtonStyle" TargetType="Button">
-
-
-            <!-- Удаляем триггеры для IsMouseOver и IsPressed -->
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                </Trigger>
-                <!-- Если есть триггер для IsMouseOver или IsPressed, удалите его или закомментируйте -->
-            </Style.Triggers>
-        </Style>
     </Window.Resources>
-    <Grid Height="806">
+    <Grid>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Top"
+Click="Leave_Click"
+FontSize="16" Cursor="Hand" Height="42" Width="52" Margin="10,21,0,0" Padding="0" Style="{StaticResource MyButtonStyle}">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Button.Resources>
+            <Image Source="../Resources/BackArrow.png"/>
+        </Button>
+        <Grid Width="550" Height="780">
 
-        <!-- Контент для неавторизованного пользователя -->
-        <Grid x:Name="UnauthorizedPanel" Visibility="Visible"
-                    VerticalAlignment="Center" HorizontalAlignment="Center" Height="410" Width="630">
-            <Button Content="Войти" Margin="60,70,60,0" Padding="10" Click="LoginButton_Click"
-                    VerticalAlignment="Top" Style="{StaticResource PinkButtonStyle}">
-            </Button>
-            <Button Content="Регистрация" Margin="60,174,60,0" Padding="10" Click="RegisterButton_Click"
-                    VerticalAlignment="Top" Style="{StaticResource PinkButtonStyle}">
-            </Button>
-            <Button Content="Выйти" Margin="65,278,65,0" Padding="10" Click="ExitButton_Click"
-                VerticalAlignment="Top" Style="{StaticResource PinkButtonStyle}"/>
+            <ComboBox x:Name="GameModeBox" Width="500" SelectionChanged="GameModeBox_SelectionChanged" Height="84" Margin="25,271,25,425" FontSize="24" FontFamily="Arial" VerticalContentAlignment="Center">
+                <ComboBoxItem>С одного устройства</ComboBoxItem>
+                <ComboBoxItem>Против компьютера</ComboBoxItem>
+            </ComboBox>
+            <Label Content="Настройка игры" HorizontalAlignment="Center" Margin="0,23,0,0" VerticalAlignment="Top" Width="500" FontFamily="Arial" FontSize="24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            <Label Content="Режим игры" HorizontalAlignment="Center" Margin="0,233,0,0" VerticalAlignment="Top" Width="500" VerticalContentAlignment="Center" FontFamily="Arial" FontSize="24"/>
+            <ComboBox x:Name="SideModeBox" Width="500" SelectionChanged="SideModeBox_SelectionChanged" Height="84" Margin="25,446,25,250" FontSize="24" FontFamily="Arial" VerticalContentAlignment="Center">
+                <ComboBoxItem Content="Крестик"/>
+                <ComboBoxItem Content="Круг"/>
+            </ComboBox>
+            <Label x:Name="SideLabel" Content="Выбор стороны" HorizontalAlignment="Center" Margin="0,403,0,0" VerticalAlignment="Top" Width="500" VerticalContentAlignment="Center" FontFamily="Arial" FontSize="24"/>
+            <Button Content="Играть" Margin="0,661,0,35" Padding="10" Click="StartButton_Click" Style="{StaticResource PinkButtonStyle}" HorizontalAlignment="Center" Width="500"/>
         </Grid>
-
-
 
     </Grid>
 </Window>

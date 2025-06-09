@@ -23,5 +23,30 @@ namespace Sample.Views
         {
             InitializeComponent();
         }
+        private bool _isLoggedIn = false;
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Здесь должна быть логика авторизации
+            // В случае успеха:
+            _isLoggedIn = true;
+            LogInWindow window = new LogInWindow();
+            window.Owner = this;
+            window.Show();
+        }
+
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Здесь должна быть логика регистрации
+            // После успешной регистрации, возможно, сразу авторизовать пользователя
+            _isLoggedIn = true;
+            RegistrationWindow window = new RegistrationWindow();
+            window.Owner = this;
+            window.Show();
+        }
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
